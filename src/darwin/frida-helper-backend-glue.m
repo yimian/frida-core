@@ -210,7 +210,6 @@ struct _FridaSpawnInstance
   FridaBreakpoint breakpoints[FRIDA_MAX_BREAKPOINTS];
   FridaPagePoolEntry page_pool[FRIDA_MAX_PAGE_POOL];
   gint single_stepping;
-  GumAddress last_single_step_address;
 
   mach_vm_address_t lib_name;
   mach_vm_address_t bootstrapper_name;
@@ -2799,16 +2798,58 @@ static void
 frida_spawn_instance_on_server_recv (void * context)
 {
   FridaSpawnInstance * self = context;
+  __Request__exception_raise_state_identity_t * request = &self->pending_request;
   kern_return_t kr;
-  GumAddress pc, last_step;
+  GumAddress pc;
   thread_state_flavor_t state_flavor = GUM_DARWIN_THREAD_STATE_FLAVOR;
   mach_msg_type_number_t state_count = GUM_DARWIN_THREAD_STATE_COUNT;
   GumDarwinUnifiedThreadState state;
   guint i, current_bp_index;
   FridaBreakpoint * breakpoint = NULL;
-  gboolean carry_on, pc_changed;
+  gboolean is_step_complete, carry_on, pc_changed;
 
   frida_spawn_instance_receive_breakpoint_request (self);
+
+#ifdef HAVE_I386
+  if (request->exception == EXC_BREAKPOINT && request->code[0] == EXC_I386_SGL)
+  {
+    FridaDebugState debug_state;
+    gsize dr6;
+    gboolean bs_set;
+
+    kr = frida_get_debug_state (self->thread, &debug_state, self->cpu_type);
+    if (kr != KERN_SUCCESS)
+      return;
+
+    if (self->cpu_type == GUM_CPU_AMD64)
+    {
+      x86_debug_state64_t * ds = &debug_state.state.uds.ds64;
+      dr6 = ds->__dr6;
+    }
+    else
+    {
+      x86_debug_state32_t * ds = &debug_state.state.uds.ds32;
+      dr6 = ds->__dr6;
+    }
+
+    bs_set = (dr6 >> 14) & 1;
+
+    is_step_complete = bs_set;
+  }
+  else
+  {
+    is_step_complete = FALSE;
+  }
+#else
+  is_step_complete = request->exception == EXC_BREAKPOINT && request->code[0] == EXC_ARM_BREAKPOINT && request->code[1] == 0;
+#endif
+
+  if ((self->single_stepping >= 0 && !is_step_complete) ||
+      (self->single_stepping == -1 && is_step_complete))
+  {
+    frida_spawn_instance_send_breakpoint_response (self);
+    return;
+  }
 
   kr = frida_get_thread_state (self->thread, state_flavor, &state, &state_count);
   if (kr != KERN_SUCCESS)
@@ -2842,16 +2883,6 @@ frida_spawn_instance_on_server_recv (void * context)
   if (self->single_stepping >= 0)
   {
     FridaBreakpoint * bp = &self->breakpoints[self->single_stepping];
-    gboolean step_still_being_enabled;
-
-    step_still_being_enabled = self->pending_request.exception == EXC_BREAKPOINT && self->pending_request.code[1] != 0;
-    if (step_still_being_enabled)
-    {
-      frida_spawn_instance_send_breakpoint_response (self);
-      return;
-    }
-
-    self->last_single_step_address = pc;
 
     frida_set_hardware_single_step (&self->breakpoint_debug_state, &state, FALSE, self->cpu_type);
 
@@ -2884,22 +2915,8 @@ frida_spawn_instance_on_server_recv (void * context)
     }
   }
 
-  last_step = self->last_single_step_address;
-  self->last_single_step_address = 0;
-
   if (breakpoint == NULL)
-  {
-    gboolean step_still_being_disabled;
-
-    step_still_being_disabled = pc != 0 && pc == last_step;
-    if (step_still_being_disabled)
-    {
-      frida_spawn_instance_send_breakpoint_response (self);
-      return;
-    }
-
     goto unexpected_exception;
-  }
 
   carry_on = frida_spawn_instance_handle_breakpoint (self, breakpoint, &state);
   if (!carry_on)
@@ -2940,7 +2957,6 @@ frida_spawn_instance_on_server_recv (void * context)
 
 unexpected_exception:
   {
-    __Request__exception_raise_state_identity_t * request = &self->pending_request;
     GString * message;
     GError * error;
 
