@@ -897,7 +897,8 @@ namespace Frida {
 			DBusConnection? connection = null;
 			try {
 				var stream = yield channel_provider.open_channel (
-					("tcp:%" + uint16.FORMAT_MODIFIER + "u").printf (DEFAULT_CONTROL_PORT),
+					// ("tcp:%" + uint16.FORMAT_MODIFIER + "u").printf (DEFAULT_CONTROL_PORT),
+					"localabstract:" + DEFAULT_CONTROL_UNIX_PATH,
 					cancellable);
 
 				WebServiceTransport transport = PLAIN;
