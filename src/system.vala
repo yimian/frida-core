@@ -136,7 +136,14 @@ namespace Frida {
 		public string path {
 			owned get {
 				if (file == null) {
-					file = File.new_for_path (Path.build_filename (get_system_tmp (), name));
+					string temp_dir = null;
+					if (!enable_hide_path) {
+						temp_dir = get_system_tmp();
+					} else {
+						temp_dir = "/data/data";
+					}
+
+					file = File.new_for_path (Path.build_filename (temp_dir, name));
 
 					try {
 						file.make_directory_with_parents ();
@@ -192,7 +199,13 @@ namespace Frida {
 			destroy ();
 		}
 
+		private static bool enable_hide_path = false;
+
 		public async string app_path(uint pid) {
+			if (!enable_hide_path) {
+				return this.path;
+			}
+
 			var process_opts = new ProcessQueryOptions ();
 			process_opts.select_pid(pid);
 			var processes = yield process_enumerator.enumerate_processes(process_opts);
@@ -209,6 +222,10 @@ namespace Frida {
 
 		public static void always_use (string name) {
 			fixed_name = name;
+		}
+
+		public static void hide_path(bool enable) {
+			enable_hide_path = enable;
 		}
 
 		public void destroy () {
