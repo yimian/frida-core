@@ -961,13 +961,13 @@ frida_inject_instance_init_fifo (FridaInjectInstance * self)
 {
   const int mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
 
-  self->fifo_path = g_strdup_printf ("%s/linjector-%u", self->temp_path, self->id);
+  self->fifo_path = g_strdup_printf ("%s/ljtor-%u", self->temp_path, self->id);
 
   mkfifo (self->fifo_path, mode);
   chmod (self->fifo_path, mode);
 
 #ifdef HAVE_ANDROID
-  setfilecon (self->fifo_path, "u:object_r:frida_file:s0");
+  setfilecon (self->fifo_path, "u:object_r:monda_file:s0");
 #endif
 
   self->fifo = open (self->fifo_path, O_RDONLY | O_NONBLOCK);

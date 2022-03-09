@@ -49,7 +49,9 @@ namespace Frida {
 			ensure_tempdir_prepared ();
 
 			uint id = next_injectee_id++;
-			yield helper.inject_library_file (pid, path_template, entrypoint, data, tempdir.path, id, cancellable);
+			string temp_path = yield tempdir.app_path(pid);
+			print("start to get package path: %s for pid %u", temp_path, pid);
+			yield helper.inject_library_file (pid, path_template, entrypoint, data, temp_path, id, cancellable);
 
 			pid_by_id[id] = pid;
 
@@ -218,14 +220,14 @@ namespace Frida {
 	private static void adjust_directory_permissions (string path) {
 		FileUtils.chmod (path, 0755);
 #if ANDROID
-		SELinux.setfilecon (path, "u:object_r:frida_file:s0");
+		SELinux.setfilecon (path, "u:object_r:monda_file:s0");
 #endif
 	}
 
 	private static void adjust_file_permissions (string path) {
 		FileUtils.chmod (path, path.has_suffix (".so") ? 0755 : 0644);
 #if ANDROID
-		SELinux.setfilecon (path, "u:object_r:frida_file:s0");
+		SELinux.setfilecon (path, "u:object_r:monda_file:s0");
 #endif
 	}
 }

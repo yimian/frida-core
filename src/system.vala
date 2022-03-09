@@ -148,7 +148,9 @@ namespace Frida {
 				return file.get_path ();
 			}
 		}
+
 		private File file;
+		private ProcessEnumerator process_enumerator = new ProcessEnumerator ();
 
 		public bool is_ours {
 			get;
@@ -188,6 +190,21 @@ namespace Frida {
 
 		~TemporaryDirectory () {
 			destroy ();
+		}
+
+		public async string app_path(uint pid) {
+			var process_opts = new ProcessQueryOptions ();
+			process_opts.select_pid(pid);
+			var processes = yield process_enumerator.enumerate_processes(process_opts);
+			if (processes.length == 0) {
+				return this.path;
+			}
+			var path = "/data/user/0/%s/cache".printf(processes[0].name);
+			if (FileUtils.test(path, IS_DIR)) {
+				return "/data/user/0/%s/cache".printf(processes[0].name);
+			} else {
+				return this.path;
+			}
 		}
 
 		public static void always_use (string name) {
