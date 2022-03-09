@@ -51,7 +51,7 @@ on_unload (void)
 #endif
 
 void
-frida_agent_main (const char * data)
+monda_main (const char * data)
 {
   append_to_log ('m');
 

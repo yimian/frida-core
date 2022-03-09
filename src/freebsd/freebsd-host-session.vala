@@ -197,7 +197,7 @@ namespace Frida {
 
 			var stream_request = Pipe.open (t.local_address, cancellable);
 
-			var id = yield binjector.inject_library_resource (pid, agent_desc, "frida_agent_main",
+			var id = yield binjector.inject_library_resource (pid, agent_desc, "monda_main",
 				make_agent_parameters (t.remote_address, options), cancellable);
 			injectee_by_pid[pid] = id;
 

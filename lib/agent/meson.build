@@ -16,7 +16,7 @@ if host_os_family != 'windows'
 endif
 
 if host_os_family == 'darwin'
-  extra_link_args += ['-Wl,-exported_symbol,_frida_agent_main']
+  extra_link_args += ['-Wl,-exported_symbol,_monda_main']
 elif host_os_family != 'windows'
   extra_link_args += ['-Wl,--version-script,' + join_paths(meson.current_source_dir(), 'frida-agent.version')]
 endif

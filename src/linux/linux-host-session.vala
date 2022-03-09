@@ -421,7 +421,7 @@ namespace Frida {
 			var stream_request = Pipe.open (t.local_address, cancellable);
 
 			uint id;
-			string entrypoint = "frida_agent_main";
+			string entrypoint = "monda_main";
 			string agent_parameters = make_agent_parameters (t.remote_address, options);
 			var linjector = injector as Linjector;
 #if HAVE_EMBEDDED_ASSETS

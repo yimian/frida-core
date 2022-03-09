@@ -54,7 +54,7 @@ simple-agent-qnx-arm.so: simple-agent.c simple-agent-qnx-arm.version
 simple-agent-qnx-arm.version:
 	echo "SIMPLE_AGENT_QNX_ARM_1.0 {"     > $@.tmp
 	echo "  global:"             >> $@.tmp
-	echo "    frida_agent_main;" >> $@.tmp
+	echo "    monda_main;" >> $@.tmp
 	echo ""                      >> $@.tmp
 	echo "  local:"              >> $@.tmp
 	echo "    *;"                >> $@.tmp
