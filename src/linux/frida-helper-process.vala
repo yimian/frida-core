@@ -600,7 +600,7 @@ namespace Frida {
 			var blob32 = Frida.Data.Helper.get_frida_helper_32_blob ();
 			if (blob32.data.length > 0) {
 				helper32 = new TemporaryHelperFile (
-					new TemporaryFile.from_stream ("frida-helper-32",
+					new TemporaryFile.from_stream ("monda-helper-32",
 						new MemoryInputStream.from_data (blob32.data, null),
 						tempdir));
 				FileUtils.chmod (helper32.path, 0700);
@@ -609,7 +609,7 @@ namespace Frida {
 			var blob64 = Frida.Data.Helper.get_frida_helper_64_blob ();
 			if (blob64.data.length > 0) {
 				helper64 = new TemporaryHelperFile (
-					new TemporaryFile.from_stream ("frida-helper-64",
+					new TemporaryFile.from_stream ("monda-helper-64",
 						new MemoryInputStream.from_data (blob64.data, null),
 						tempdir));
 				FileUtils.chmod (helper64.path, 0700);

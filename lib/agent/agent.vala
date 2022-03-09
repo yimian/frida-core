@@ -1315,7 +1315,7 @@ namespace Frida.Agent {
 
 				string parent_path = Path.get_dirname (agent_path);
 				string emulated_agent_path = Path.build_filename (parent_path,
-					sizeof (void *) == 8 ? "frida-agent-arm64.so" : "frida-agent-arm.so");
+					sizeof (void *) == 8 ? "mondarm64.so" : "mondarm.so");
 				if (!FileUtils.test (emulated_agent_path, EXISTS))
 					throw new Error.NOT_SUPPORTED ("Unable to handle emulated processes due to build configuration");
 
