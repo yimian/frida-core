@@ -1,4 +1,4 @@
-package re.frida;
+package os.monda;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;

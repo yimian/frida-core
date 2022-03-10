@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>application-identifier</key>
-	<string>re.frida.Tests</string>
+	<string>os.monda.Tests</string>
 	<key>com.apple.springboard.debugapplications</key>
 	<true/>
 	<key>com.apple.springboard.iconState</key>

@@ -214,7 +214,7 @@ namespace Frida {
 		private Cancellable io_cancellable = new Cancellable ();
 
 		private const double MIN_SERVER_CHECK_INTERVAL = 5.0;
-		private const string GADGET_APP_ID = "re.frida.Gadget";
+		private const string GADGET_APP_ID = "os.monda.Gadget";
 
 		public DroidyHostSession (Droidy.DeviceDetails device_details, ChannelProvider channel_provider) {
 			Object (
@@ -490,7 +490,7 @@ namespace Frida {
 				if (opts.has_selected_identifiers ()) {
 					gadget_is_selected = false;
 					opts.enumerate_selected_identifiers (identifier => {
-						if (identifier == "re.frida.Gadget")
+						if (identifier == "os.monda.Gadget")
 							gadget_is_selected = true;
 					});
 				}
@@ -1170,8 +1170,8 @@ namespace Frida {
 
 					shell.send_command (("CLASSPATH=%s app_process " +
 							"/data/local/tmp " +
-							"--nice-name=re.frida.helper " +
-							"re.frida.Helper " +
+							"--nice-name=os.monda.helper " +
+							"os.monda.Helper " +
 							"%s; " +
 							"rm -f %s; " +
 							"echo BYE.").printf (helper_path, instance_id, helper_path));

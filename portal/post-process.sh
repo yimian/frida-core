@@ -42,7 +42,7 @@ case $host_os in
   macos|ios)
     case $host_os in
       macos)
-        "$CODESIGN" -f -s "$MACOS_CERTID" -i "re.frida.Portal" "$intermediate_path" || exit 1
+        "$CODESIGN" -f -s "$MACOS_CERTID" -i "os.monda.Portal" "$intermediate_path" || exit 1
         ;;
       ios)
         "$CODESIGN" -f -s "$IOS_CERTID" --entitlements "$input_entitlements_path" "$intermediate_path" || exit 1

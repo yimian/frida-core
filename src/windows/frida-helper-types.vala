@@ -8,7 +8,7 @@ namespace Frida {
 			string[] dependencies, uint id, Cancellable? cancellable) throws Error, IOError;
 	}
 
-	[DBus (name = "re.frida.Helper")]
+	[DBus (name = "os.monda.Helper")]
 	public interface WindowsRemoteHelper : Object {
 		public signal void uninjected (uint id);
 

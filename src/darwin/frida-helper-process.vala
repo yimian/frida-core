@@ -335,7 +335,7 @@ namespace Frida {
 		}
 
 		private static string make_service_name () {
-			var builder = new StringBuilder ("re.frida.Helper");
+			var builder = new StringBuilder ("os.monda.Helper");
 
 			builder.append_printf (".%d.", Posix.getpid ());
 

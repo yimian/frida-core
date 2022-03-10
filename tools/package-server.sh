@@ -35,13 +35,13 @@ cp "$agent" "$tmpdir/usr/lib/frida/frida-agent.dylib"
 chmod 755 "$tmpdir/usr/lib/frida/frida-agent.dylib"
 
 mkdir -p "$tmpdir/Library/LaunchDaemons/"
-cat >"$tmpdir/Library/LaunchDaemons/re.frida.server.plist" <<EOF
+cat >"$tmpdir/Library/LaunchDaemons/os.monda.server.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>re.frida.server</string>
+	<string>os.monda.server</string>
 	<key>Program</key>
 	<string>/usr/sbin/frida-server</string>
 	<key>ProgramArguments</key>
@@ -66,13 +66,13 @@ cat >"$tmpdir/Library/LaunchDaemons/re.frida.server.plist" <<EOF
 </dict>
 </plist>
 EOF
-chmod 644 "$tmpdir/Library/LaunchDaemons/re.frida.server.plist"
+chmod 644 "$tmpdir/Library/LaunchDaemons/os.monda.server.plist"
 
 installed_size=$(du -sk "$tmpdir" | cut -f1)
 
 mkdir -p "$tmpdir/DEBIAN/"
 cat >"$tmpdir/DEBIAN/control" <<EOF
-Package: re.frida.server
+Package: os.monda.server
 Name: Frida
 Version: $FRIDA_VERSION
 Priority: optional
@@ -84,7 +84,7 @@ Homepage: https://www.frida.re/
 Maintainer: Ole André Vadla Ravnås <oleavr@nowsecure.com>
 Author: Frida Developers <oleavr@nowsecure.com>
 Section: Development
-Conflicts: re.frida.server64
+Conflicts: os.monda.server64
 EOF
 chmod 644 "$tmpdir/DEBIAN/control"
 
@@ -92,11 +92,11 @@ cat >"$tmpdir/DEBIAN/extrainst_" <<EOF
 #!/bin/sh
 
 if [ "\$1" = upgrade ]; then
-  launchctl unload /Library/LaunchDaemons/re.frida.server.plist
+  launchctl unload /Library/LaunchDaemons/os.monda.server.plist
 fi
 
 if [ "\$1" = install ] || [ "\$1" = upgrade ]; then
-  launchctl load /Library/LaunchDaemons/re.frida.server.plist
+  launchctl load /Library/LaunchDaemons/os.monda.server.plist
 fi
 
 exit 0
@@ -106,7 +106,7 @@ cat >"$tmpdir/DEBIAN/prerm" <<EOF
 #!/bin/sh
 
 if [ "\$1" = remove ] || [ "\$1" = purge ]; then
-  launchctl unload /Library/LaunchDaemons/re.frida.server.plist
+  launchctl unload /Library/LaunchDaemons/os.monda.server.plist
 fi
 
 exit 0

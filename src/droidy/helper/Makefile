@@ -17,4 +17,4 @@ build/frida-helper.jar: re/frida/Helper.java
 		-Xlint:unchecked \
 		$^ \
 		-d build/java/
-	jar cfe $@ re.frida.Helper -C build/java/ .
+	jar cfe $@ os.monda.Helper -C build/java/ .

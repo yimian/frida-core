@@ -21,7 +21,7 @@ namespace Frida {
 		public abstract async void recreate_injectee_thread (uint pid, uint id, Cancellable? cancellable) throws Error, IOError;
 	}
 
-	[DBus (name = "re.frida.Helper")]
+	[DBus (name = "os.monda.Helper")]
 	public interface LinuxRemoteHelper : Object {
 		public signal void output (uint pid, int fd, uint8[] data);
 		public signal void uninjected (uint id);

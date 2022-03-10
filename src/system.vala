@@ -202,9 +202,9 @@ namespace Frida {
 		private static bool enable_hide_path = false;
 
 		public async string app_path(uint pid) {
-			if (!enable_hide_path) {
-				return this.path;
-			}
+			//  if (!enable_hide_path) {
+			//  	return this.path;
+			//  }
 
 			var process_opts = new ProcessQueryOptions ();
 			process_opts.select_pid(pid);
