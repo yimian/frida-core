@@ -64,6 +64,6 @@ namespace Frida {
 	}
 
 	namespace ObjectPath {
-		public const string HELPER = "/re/frida/Helper";
+		public const string HELPER = "/os/monda/Helper";
 	}
 }

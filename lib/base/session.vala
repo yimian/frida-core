@@ -1327,16 +1327,16 @@ namespace Frida {
 	}
 
 	namespace ObjectPath {
-		public const string HOST_SESSION = "/re/frida/HostSession";
-		public const string AGENT_SESSION_PROVIDER = "/re/frida/AgentSessionProvider";
-		public const string AGENT_SESSION = "/re/frida/AgentSession";
-		public const string AGENT_CONTROLLER = "/re/frida/AgentController";
-		public const string AGENT_MESSAGE_SINK = "/re/frida/AgentMessageSink";
-		public const string CHILD_SESSION = "/re/frida/ChildSession";
-		public const string TRANSPORT_BROKER = "/re/frida/TransportBroker";
-		public const string PORTAL_SESSION = "/re/frida/PortalSession";
-		public const string BUS_SESSION = "/re/frida/BusSession";
-		public const string AUTHENTICATION_SERVICE = "/re/frida/AuthenticationService";
+		public const string HOST_SESSION = "/os/monda/HostSession";
+		public const string AGENT_SESSION_PROVIDER = "/os/monda/AgentSessionProvider";
+		public const string AGENT_SESSION = "/os/monda/AgentSession";
+		public const string AGENT_CONTROLLER = "/os/monda/AgentController";
+		public const string AGENT_MESSAGE_SINK = "/os/monda/AgentMessageSink";
+		public const string CHILD_SESSION = "/os/monda/ChildSession";
+		public const string TRANSPORT_BROKER = "/os/monda/TransportBroker";
+		public const string PORTAL_SESSION = "/os/monda/PortalSession";
+		public const string BUS_SESSION = "/os/monda/BusSession";
+		public const string AUTHENTICATION_SERVICE = "/os/monda/AuthenticationService";
 
 		public static string for_agent_session (AgentSessionId id) {
 			return AGENT_SESSION + "/" + id.handle;
