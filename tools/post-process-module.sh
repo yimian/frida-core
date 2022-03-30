@@ -57,4 +57,23 @@ case $host_os in
     ;;
 esac
 
+# replace frida, gumjs, glib strings
+build_os=$(uname -s | tr '[A-Z]' '[a-z]' | sed 's,^darwin$,macos,')
+sed_params=(
+  -e "s,/frida-core/lib,/monda-core/lib,g"
+  -e "s,/frida/build,/monda/build,g"
+  -e "s,0.9.27-frida,0.9.27-monda,g"
+  "$intermediate_path"
+)
+
+echo "start to replace suscipious strings"
+case $build_os in
+  macos|freebsd)
+    LC_CTYPE=C sed -i "" ${sed_params[@]} || exit 1
+    ;;
+  *)
+    LC_CTYPE=C sed -i ${sed_params[@]} || exit 1
+    ;;
+esac
+
 mv "$intermediate_path" "$output_path"

@@ -275,7 +275,7 @@ namespace Frida {
 			var opts = SessionOptions._deserialize (options);
 
 			if (opts.realm == EMULATED)
-				throw new Error.NOT_SUPPORTED ("Emulated realm is not supported by frida-gadget");
+				throw new Error.NOT_SUPPORTED ("Emulated realm is not supported by monda-gadget");
 
 			AgentMessageSink sink;
 			try {

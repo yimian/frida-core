@@ -286,9 +286,13 @@ configure_file(input: 'config.h.in',
 
 add_project_arguments(
   '-include', 'config.h',
-  '-DG_LOG_DOMAIN="Frida"',
+  '-DG_LOG_DOMAIN="Monda"',
   '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_56',
   '-DG_DISABLE_DEPRECATED',
+  '-DG_DISABLE_ASSERT',
+  '-DG_DISABLE_CHECKS',
+  '-DG_DISABLE_CAST_CHECKS',
+  '-DG_LOG_USE_STRUCTURED=0',  # disable g_critical to output __FILE__
   language: c_languages)
 
 if host_os_family == 'linux'
