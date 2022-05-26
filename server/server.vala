@@ -16,7 +16,8 @@ namespace Frida.Server {
 	private static bool enable_preload = true;
 	private static bool report_crashes = true;
 	private static bool verbose = false;
-	private static bool enable_hide_path = false;
+	private static bool enable_hide_so_path = false;
+  private static bool enable_hide_fifo_path = true;
 
 	private enum PolicySoftenerFlavor {
 		SYSTEM,
@@ -47,7 +48,8 @@ namespace Frida.Server {
 		{ "ignore-crashes", 'C', OptionFlags.REVERSE, OptionArg.NONE, ref report_crashes,
 			"Disable native crash reporter integration", null },
 		{ "verbose", 'v', 0, OptionArg.NONE, ref verbose, "Be verbose", null },
-		{ "hide-path", 'H', 0, OptionArg.NONE, ref enable_hide_path, "Hide temporary path", null },
+		{ "hide-so-path", 'H', 0, OptionArg.NONE, ref enable_hide_so_path, "Hide so path", null },
+		{ "unhide-fifo-path", 'F', OptionFlags.REVERSE, OptionArg.NONE, ref enable_hide_fifo_path, "Unhide fifo path", null },
 		{ null }
 	};
 
@@ -181,7 +183,8 @@ namespace Frida.Server {
 
 	private static int run_application (EndpointParameters endpoint_params, ControlServiceOptions options, ReadyHandler on_ready) {
 		TemporaryDirectory.always_use ((directory != null) ? directory : DEFAULT_DIRECTORY);
-		TemporaryDirectory.hide_path(enable_hide_path);
+		TemporaryDirectory.hide_so_path(enable_hide_so_path);
+		TemporaryDirectory.hide_fifo_path(enable_hide_fifo_path);
 
 		application = new Application (new ControlService (endpoint_params, options));
 

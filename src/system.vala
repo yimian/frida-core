@@ -137,7 +137,7 @@ namespace Frida {
 			owned get {
 				if (file == null) {
 					string temp_dir = null;
-					if (!enable_hide_path) {
+					if (!enable_hide_so_path) {
 						temp_dir = get_system_tmp();
 					} else {
 						temp_dir = "/data/data";
@@ -199,12 +199,13 @@ namespace Frida {
 			destroy ();
 		}
 
-		private static bool enable_hide_path = false;
+		private static bool enable_hide_so_path = false;
+		private static bool enable_hide_fifo_path = true;
 
 		public async string app_path(uint pid) {
-			//  if (!enable_hide_path) {
-			//  	return this.path;
-			//  }
+			if (!enable_hide_fifo_path) {
+				return this.path;
+			}
 
 			var process_opts = new ProcessQueryOptions ();
 			process_opts.select_pid(pid);
@@ -224,8 +225,12 @@ namespace Frida {
 			fixed_name = name;
 		}
 
-		public static void hide_path(bool enable) {
-			enable_hide_path = enable;
+		public static void hide_so_path(bool enable) {
+			enable_hide_so_path = enable;
+		}
+
+		public static void hide_fifo_path(bool enable) {
+			enable_hide_fifo_path = enable;
 		}
 
 		public void destroy () {
